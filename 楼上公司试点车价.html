@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>楼上试点车价计算器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            width: 100%;
+        }
+
+        label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        label span {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        label input {
+            width: 80%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 80%;
+        }
+
+        #totalPrice {
+            font-size: 18px;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<h1>楼上试点车价计算器</h1>
+
+<label>
+    <span>是否为汽油车</span>
+    <input type="checkbox" id="isGasoline" onchange="calculateTotal()">
+</label>
+
+<label>
+    <span>指导价：</span>
+    <input type="number" id="guidePrice" step="1" oninput="calculateTotal()" required>
+</label>
+
+<label>
+    <span>优惠价格：</span>
+    <input type="number" id="discountPrice" step="1" oninput="calculateTotal()" required>
+</label>
+
+<label>
+    <span>交强险费用：</span>
+    <input type="number" id="insuranceCost" step="1" oninput="calculateTotal()" required>
+</label>
+
+<label>
+    <span>上牌过户费用：</span>
+    <input type="number" id="transferCost" step="1" oninput="calculateTotal()" required>
+</label>
+
+<label>
+    <span>利润：</span>
+    <input type="number" id="profit" step="1" oninput="calculateTotal()" required>
+</label>
+
+<label>
+    <span>运费：</span>
+    <input type="number" id="shippingCost" step="1" oninput="calculateTotal()" required>
+</label>
+
+<label>
+    <span>汇率：</span>
+    <input type="number" id="exchangeRate" step="0.01" oninput="calculateTotal()" required>
+</label>
+
+<button onclick="calculateTotal()">计算总价</button>
+
+<p id="totalPrice">总价： </p>
+
+<script>
+    function calculateTotal() {
+        const isGasoline = document.getElementById('isGasoline').checked;
+        const guidePrice = parseFloat(document.getElementById('guidePrice').value) || 0;
+        const discountPrice = parseFloat(document.getElementById('discountPrice').value) || 0;
+        const insuranceCost = parseFloat(document.getElementById('insuranceCost').value) || 0;
+        const transferCost = parseFloat(document.getElementById('transferCost').value) || 0;
+        const profit = parseFloat(document.getElementById('profit').value) || 0;
+        const shippingCost = parseFloat(document.getElementById('shippingCost').value) || 0;
+        const exchangeRate = parseFloat(document.getElementById('exchangeRate').value) || 1;
+
+        const enterpriseFee = calculateEnterpriseFee(guidePrice - discountPrice);
+        const purchaseTax = isGasoline ? (guidePrice - discountPrice) / 11.3 : 0;
+        const refundTax = (guidePrice - discountPrice) * 0.115;
+
+        let totalPrice;
+
+        if (isGasoline) {
+            totalPrice = guidePrice - discountPrice + insuranceCost + transferCost +
+                purchaseTax - refundTax + enterpriseFee + profit + shippingCost;
+        } else {
+            totalPrice = guidePrice - discountPrice + insuranceCost + transferCost -
+                refundTax + enterpriseFee + profit + shippingCost;
+        }
+
+       // Convert to USD
+        const totalPriceUSD = totalPrice / exchangeRate;
+
+        document.getElementById('totalPrice').innerText = '美元总价： $' + totalPriceUSD.toFixed(0);
+    }
+
+
+    function calculateEnterpriseFee(discountPrice) {
+        if (discountPrice <= 300000) {
+            return 1240;
+        } else if (discountPrice > 300000 && discountPrice <= 600000) {
+            return 1740;
+        } else {
+            return 2740;
+        }
+    }
+</script>
+
+</body>
+</html>
