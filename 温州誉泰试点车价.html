@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>温州誉泰车价计算器</title>
+    <title>楼上试点车价计算器</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,7 +11,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 22.22%; /* 修改为 22.22% */
         }
 
         h1 {
@@ -21,14 +20,19 @@
 
         label {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
             width: 100%;
             margin-bottom: 10px;
         }
 
+        label span {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
         label input {
-            width: 50%;
+            width: 80%;
             padding: 5px;
             box-sizing: border-box;
         }
@@ -37,7 +41,7 @@
             padding: 10px;
             font-size: 16px;
             cursor: pointer;
-            width: 50%;
+            width: 80%;
         }
 
         #totalPrice {
@@ -48,7 +52,6 @@
     </style>
 </head>
 <body>
-
 <h1>温州誉泰车价计算器</h1>
 
 <label>
